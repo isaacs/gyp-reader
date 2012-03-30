@@ -15,3 +15,10 @@ gr("binding.gyp", function (er, data) {
   // data is an object
 })
 ```
+
+## Warning
+
+The gyp file is evaled in a python subprocess.  Do not run this on gyp
+files that you are not sure of.  This module should only be used if
+you're probably going to run `gyp` on them anyway, and presumably
+they're trustworthy.
