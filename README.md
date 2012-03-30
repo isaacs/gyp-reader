@@ -25,4 +25,4 @@ they're trustworthy.
 
 ## Thanks
 
-Trent Mick (@trentm) wrote the python for this module.
+[Trent Mick](https://github.com/trentm) wrote the python for this module.
