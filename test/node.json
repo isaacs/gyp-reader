@@ -1,0 +1,285 @@
+{
+  "//": "This is a comment!", 
+  "variables": {
+    "node_shared_zlib%": "false", 
+    "library_files": [
+      "src/node.js", 
+      "lib/_debugger.js", 
+      "lib/_linklist.js", 
+      "lib/assert.js", 
+      "lib/buffer.js", 
+      "lib/buffer_ieee754.js", 
+      "lib/child_process.js", 
+      "lib/console.js", 
+      "lib/constants.js", 
+      "lib/crypto.js", 
+      "lib/cluster.js", 
+      "lib/dgram.js", 
+      "lib/dns.js", 
+      "lib/events.js", 
+      "lib/freelist.js", 
+      "lib/fs.js", 
+      "lib/http.js", 
+      "lib/https.js", 
+      "lib/module.js", 
+      "lib/net.js", 
+      "lib/os.js", 
+      "lib/path.js", 
+      "lib/punycode.js", 
+      "lib/querystring.js", 
+      "lib/readline.js", 
+      "lib/repl.js", 
+      "lib/stream.js", 
+      "lib/string_decoder.js", 
+      "lib/sys.js", 
+      "lib/timers.js", 
+      "lib/tls.js", 
+      "lib/tty.js", 
+      "lib/url.js", 
+      "lib/util.js", 
+      "lib/vm.js", 
+      "lib/zlib.js"
+    ], 
+    "node_use_system_openssl%": "false", 
+    "node_shared_v8%": "false", 
+    "v8_use_snapshot%": "true", 
+    "werror": "", 
+    "node_use_openssl%": "true", 
+    "node_use_dtrace": "false"
+  }, 
+  "targets": [
+    {
+      "sources": [
+        "src/fs_event_wrap.cc", 
+        "src/cares_wrap.cc", 
+        "src/handle_wrap.cc", 
+        "src/node.cc", 
+        "src/node_buffer.cc", 
+        "src/node_constants.cc", 
+        "src/node_extensions.cc", 
+        "src/node_file.cc", 
+        "src/node_http_parser.cc", 
+        "src/node_javascript.cc", 
+        "src/node_main.cc", 
+        "src/node_os.cc", 
+        "src/node_script.cc", 
+        "src/node_string.cc", 
+        "src/node_zlib.cc", 
+        "src/pipe_wrap.cc", 
+        "src/stream_wrap.cc", 
+        "src/tcp_wrap.cc", 
+        "src/timer_wrap.cc", 
+        "src/tty_wrap.cc", 
+        "src/process_wrap.cc", 
+        "src/v8_typed_array.cc", 
+        "src/udp_wrap.cc", 
+        "src/handle_wrap.h", 
+        "src/node.h", 
+        "src/node_buffer.h", 
+        "src/node_constants.h", 
+        "src/node_crypto.h", 
+        "src/node_extensions.h", 
+        "src/node_file.h", 
+        "src/node_http_parser.h", 
+        "src/node_javascript.h", 
+        "src/node_os.h", 
+        "src/node_root_certs.h", 
+        "src/node_script.h", 
+        "src/node_string.h", 
+        "src/node_version.h", 
+        "src/pipe_wrap.h", 
+        "src/req_wrap.h", 
+        "src/stream_wrap.h", 
+        "src/v8_typed_array.h", 
+        "deps/http_parser/http_parser.h", 
+        "<(SHARED_INTERMEDIATE_DIR)/node_natives.h", 
+        "<@(library_files)", 
+        "common.gypi"
+      ], 
+      "dependencies": [
+        "deps/http_parser/http_parser.gyp:http_parser", 
+        "deps/uv/uv.gyp:uv", 
+        "node_js2c#host"
+      ], 
+      "msvs-settings": {
+        "VCLinkerTool": {
+          "SubSystem": 1
+        }
+      }, 
+      "target_name": "node", 
+      "conditions": [
+        [
+          "node_use_openssl==\"true\"", 
+          {
+            "sources": [
+              "src/node_crypto.cc"
+            ], 
+            "conditions": [
+              [
+                "node_use_system_openssl==\"false\"", 
+                {
+                  "dependencies": [
+                    "./deps/openssl/openssl.gyp:openssl"
+                  ]
+                }
+              ]
+            ], 
+            "defines": [
+              "HAVE_OPENSSL=1"
+            ]
+          }, 
+          {
+            "defines": [
+              "HAVE_OPENSSL=0"
+            ]
+          }
+        ], 
+        [
+          "node_use_dtrace==\"true\"", 
+          {
+            "sources": [
+              "src/node_dtrace.cc", 
+              "src/node_dtrace.h", 
+              "src/node_provider.h"
+            ]
+          }
+        ], 
+        [
+          "node_shared_v8==\"true\"", 
+          {
+            "sources": [
+              "<(node_shared_v8_includes)/v8.h", 
+              "<(node_shared_v8_includes)/v8-debug.h"
+            ]
+          }, 
+          {
+            "sources": [
+              "deps/v8/include/v8.h", 
+              "deps/v8/include/v8-debug.h"
+            ], 
+            "dependencies": [
+              "deps/v8/tools/gyp/v8.gyp:v8"
+            ]
+          }
+        ], 
+        [
+          "node_shared_zlib==\"false\"", 
+          {
+            "dependencies": [
+              "deps/zlib/zlib.gyp:zlib"
+            ]
+          }
+        ], 
+        [
+          "OS==\"win\"", 
+          {
+            "libraries": [
+              "-lpsapi.lib"
+            ], 
+            "sources": [
+              "tools/msvs/res/node.rc"
+            ], 
+            "defines": [
+              "FD_SETSIZE=1024", 
+              "PLATFORM=\"win32\"", 
+              "_UNICODE=1"
+            ]
+          }, 
+          {
+            "sources": [
+              "src/node_signal_watcher.cc", 
+              "src/node_stat_watcher.cc", 
+              "src/node_io_watcher.cc"
+            ], 
+            "defines": [
+              "__POSIX__"
+            ]
+          }
+        ], 
+        [
+          "OS==\"mac\"", 
+          {
+            "libraries": [
+              "-framework Carbon"
+            ], 
+            "defines!": [
+              "PLATFORM=\"mac\""
+            ], 
+            "defines": [
+              "PLATFORM=\"darwin\""
+            ]
+          }
+        ], 
+        [
+          "OS==\"freebsd\"", 
+          {
+            "libraries": [
+              "-lutil", 
+              "-lkvm"
+            ]
+          }
+        ], 
+        [
+          "OS==\"solaris\"", 
+          {
+            "libraries": [
+              "-lkstat"
+            ]
+          }
+        ]
+      ], 
+      "defines": [
+        "NODE_WANT_INTERNALS=1", 
+        "ARCH=\"<(target_arch)\"", 
+        "PLATFORM=\"<(OS)\""
+      ], 
+      "type": "executable", 
+      "include_dirs": [
+        "src", 
+        "deps/uv/src/ares", 
+        "<(SHARED_INTERMEDIATE_DIR)"
+      ]
+    }, 
+    {
+      "target_name": "node_js2c", 
+      "toolsets": [
+        "host"
+      ], 
+      "type": "none", 
+      "actions": [
+        {
+          "inputs": [
+            "<@(library_files)", 
+            "./config.gypi"
+          ], 
+          "conditions": [
+            [
+              "node_use_dtrace==\"true\"", 
+              {
+                "action": [
+                  "python", 
+                  "tools/js2c.py", 
+                  "<@(_outputs)", 
+                  "<@(_inputs)"
+                ]
+              }, 
+              {
+                "action": [
+                  "python", 
+                  "tools/js2c.py", 
+                  "<@(_outputs)", 
+                  "<@(_inputs)", 
+                  "src/macros.py"
+                ]
+              }
+            ]
+          ], 
+          "outputs": [
+            "<(SHARED_INTERMEDIATE_DIR)/node_natives.h"
+          ], 
+          "action_name": "node_js2c"
+        }
+      ]
+    }
+  ]
+}
