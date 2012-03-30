@@ -2,10 +2,9 @@
 module.exports = gr
 
 var spawn = require("child_process").spawn
-, pyprog = "import sys;"
+, pyprog = "import sys, ast, json;"
          + "c = open(sys.argv[1]).read();"
-         + "d = eval(c);"
-         + "import json;"
+         + "d = ast.literal_eval(c);"
          + "print json.dumps(d)"
 , StringDecoder = require("string_decoder").StringDecoder
 
