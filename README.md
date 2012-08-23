@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/isaacs/gyp-reader.png)](http://travis-ci.org/isaacs/gyp-reader)
 This is a module for reading gyp files in node.
 
 Gyp files are Python literals.  When the happy day comes that a build
